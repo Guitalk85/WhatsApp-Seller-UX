@@ -1,0 +1,2103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BiofuelCircle Next — WhatsApp Seller UX v1</title>
+<style>
+/* ============================================================
+   GLOBAL BASE
+   ============================================================ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #f4f4f5;
+  color: #1f2937;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   TOP STICKY NAV
+   ============================================================ */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #075E54;
+  color: #fff;
+  padding: 12px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.nav-brand {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+.nav-brand .nav-brand-tag {
+  font-size: 10.5px;
+  background: rgba(255,255,255,0.15);
+  padding: 3px 8px;
+  border-radius: 12px;
+  margin-left: 8px;
+  font-weight: 500;
+}
+.nav-links {
+  display: flex;
+  gap: 4px;
+}
+.nav-links a {
+  color: rgba(255,255,255,0.85);
+  font-size: 12.5px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+.nav-links a:hover {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+}
+.nav-links a .step-num {
+  opacity: 0.6;
+  margin-right: 6px;
+  font-weight: 700;
+}
+
+/* ============================================================
+   DOCUMENT HEADER
+   ============================================================ */
+.doc-header {
+  background: linear-gradient(135deg, #075E54 0%, #128C7E 100%);
+  color: #fff;
+  padding: 48px 32px 56px;
+  text-align: center;
+}
+.doc-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.8px;
+  margin-bottom: 10px;
+}
+.doc-header .doc-subtitle {
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.9);
+  max-width: 720px;
+  margin: 0 auto;
+  line-height: 1.55;
+}
+.doc-header .meta-row {
+  margin-top: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.doc-header .chip {
+  font-size: 11px;
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+}
+
+/* ============================================================
+   SECTION WRAPPERS
+   ============================================================ */
+.section-block {
+  padding: 56px 32px 80px;
+}
+.section-block.alt {
+  background: #fff;
+}
+.section-block.mocks-bg {
+  background: linear-gradient(180deg, #f4f4f5 0%, #ebebec 100%);
+}
+
+.section-header {
+  max-width: 1500px;
+  margin: 0 auto 36px;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 18px;
+}
+.section-header.alt { border-bottom-color: #f0f0f0; }
+.section-number {
+  display: inline-block;
+  background: #075E54;
+  color: #fff;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  text-align: center;
+  line-height: 28px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-right: 12px;
+  vertical-align: middle;
+}
+.section-title {
+  display: inline-block;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  vertical-align: middle;
+  color: #111827;
+}
+.section-sub {
+  font-size: 13.5px;
+  color: #6b7280;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   DOC PROSE STYLING (for markdown-converted sections)
+   ============================================================ */
+.doc-prose {
+  max-width: 820px;
+  margin: 0 auto;
+  font-size: 14.5px;
+  color: #1f2937;
+  line-height: 1.65;
+}
+.doc-prose h1 {
+  /* H1 from markdown is suppressed - we use section-header instead */
+  display: none;
+}
+.doc-prose h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 38px 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e5e7eb;
+  letter-spacing: -0.2px;
+}
+.doc-prose h2:first-child {
+  margin-top: 0;
+}
+.doc-prose h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 28px 0 8px;
+}
+.doc-prose h3 code {
+  font-size: 14px;
+  background: #f3f4f6;
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: #075E54;
+  font-weight: 600;
+}
+.doc-prose h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+  margin: 18px 0 6px;
+}
+.doc-prose p {
+  margin: 0 0 12px;
+}
+.doc-prose ul, .doc-prose ol {
+  margin: 0 0 14px 22px;
+}
+.doc-prose li {
+  margin-bottom: 5px;
+}
+.doc-prose li > ul, .doc-prose li > ol {
+  margin-top: 5px;
+}
+.doc-prose blockquote {
+  border-left: 3px solid #128C7E;
+  background: #f0fdfa;
+  padding: 10px 14px;
+  margin: 12px 0;
+  font-size: 13.5px;
+  color: #374151;
+  border-radius: 0 4px 4px 0;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  white-space: pre-wrap;
+  line-height: 1.55;
+}
+.doc-prose code {
+  background: #f3f4f6;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 0.9em;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color: #be185d;
+}
+.doc-prose pre {
+  background: #1f2937;
+  color: #e5e7eb;
+  padding: 16px 18px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  overflow-x: auto;
+  margin: 14px 0;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+.doc-prose pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+.doc-prose strong {
+  font-weight: 700;
+  color: #111827;
+}
+.doc-prose em {
+  font-style: italic;
+  color: #4b5563;
+}
+.doc-prose hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 32px 0;
+}
+.doc-prose a {
+  color: #027eb5;
+  text-decoration: underline;
+}
+.doc-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 13px;
+}
+.doc-prose th, .doc-prose td {
+  border: 1px solid #e5e7eb;
+  padding: 7px 10px;
+  text-align: left;
+}
+.doc-prose th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* ============================================================
+   PRESERVED MOCK STYLING (from original whatsapp-mocks.html)
+   ============================================================ */
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: #f4f4f5;
+    color: #1f2937;
+    padding: 40px 28px 60px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page-header {
+    max-width: 1500px;
+    margin: 0 auto 32px;
+  }
+  .page-title {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+  .page-sub {
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.5;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .chip {
+    font-size: 11px;
+    background: #e5e7eb;
+    color: #374151;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 36px 28px;
+    max-width: 1700px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 1400px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 900px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 620px)  { .grid { grid-template-columns: 1fr; } }
+
+  .cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cell-label {
+    margin-top: 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #111827;
+    text-align: center;
+  }
+  .cell-sublabel {
+    margin-top: 3px;
+    font-size: 11px;
+    color: #6b7280;
+    text-align: center;
+    max-width: 280px;
+    line-height: 1.4;
+  }
+
+  /* PHONE FRAME */
+  .phone {
+    width: 290px;
+    height: 600px;
+    background: #000;
+    border-radius: 28px;
+    padding: 6px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.16), 0 2px 6px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+  .screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 22px;
+    overflow: hidden;
+    background: #ECE5DD;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* STATUS BAR (iOS-style) */
+  .statusbar {
+    height: 22px;
+    background: #075E54;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .statusbar-right {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+  .signal { width: 14px; height: 8px; background: #fff; border-radius: 1px; opacity: 0.95; }
+  .battery {
+    width: 18px; height: 9px; border: 1px solid #fff; border-radius: 2px;
+    position: relative;
+  }
+  .battery::after {
+    content: ''; position: absolute; right: -3px; top: 2px; width: 2px; height: 3px; background: #fff;
+  }
+  .battery-fill { width: 80%; height: 100%; background: #fff; border-radius: 1px; }
+
+  /* HEADER */
+  .header {
+    background: #075E54;
+    color: #fff;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    flex-shrink: 0;
+    gap: 8px;
+  }
+  .back-arrow {
+    color: #fff;
+    font-size: 18px;
+    line-height: 1;
+  }
+  .avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: #25D366;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .header-info { flex: 1; min-width: 0; }
+  .header-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .verified-tick {
+    display: inline-block;
+    width: 12px; height: 12px;
+    background: #25D366;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 8px;
+    text-align: center;
+    line-height: 12px;
+    font-weight: 700;
+  }
+  .header-status {
+    font-size: 11px;
+    color: rgba(255,255,255,0.85);
+  }
+  .header-icons {
+    display: flex; gap: 14px;
+    color: #fff;
+    font-size: 14px;
+  }
+  .icon-btn {
+    width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* CHAT AREA */
+  .chat {
+    flex: 1;
+    background-color: #ECE5DD;
+    background-image:
+      radial-gradient(circle at 18% 12%, rgba(0,0,0,0.025) 1.5px, transparent 2px),
+      radial-gradient(circle at 78% 32%, rgba(0,0,0,0.022) 1.5px, transparent 2px),
+      radial-gradient(circle at 42% 68%, rgba(0,0,0,0.02) 1.5px, transparent 2px),
+      radial-gradient(circle at 88% 84%, rgba(0,0,0,0.018) 1.5px, transparent 2px),
+      radial-gradient(circle at 8% 92%, rgba(0,0,0,0.02) 1.5px, transparent 2px);
+    padding: 10px 8px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+  }
+  .chat::-webkit-scrollbar { width: 0; }
+
+  /* DATE SEPARATOR */
+  .date-sep {
+    align-self: center;
+    background: rgba(225,245,254,0.92);
+    color: #54656f;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 8px;
+    margin: 6px 0;
+    box-shadow: 0 1px 0.5px rgba(0,0,0,0.07);
+  }
+
+  /* MESSAGES */
+  .msg {
+    max-width: 80%;
+    border-radius: 7px;
+    padding: 6px 8px 4px 8px;
+    font-size: 12.5px;
+    line-height: 1.35;
+    position: relative;
+    word-wrap: break-word;
+    box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+    margin-bottom: 2px;
+  }
+  .msg.bot {
+    background: #fff;
+    align-self: flex-start;
+    color: #111;
+    border-top-left-radius: 0;
+  }
+  .msg.user {
+    background: #DCF8C6;
+    align-self: flex-end;
+    color: #111;
+    border-top-right-radius: 0;
+  }
+  .msg .meta {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
+    font-size: 9.5px;
+    color: #667781;
+    margin-top: 2px;
+  }
+  .ticks {
+    color: #53bdeb;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: -2px;
+  }
+  .ticks.gray { color: #8696a0; }
+
+  .msg-title {
+    font-weight: 700;
+    color: #075E54;
+    font-size: 12px;
+    margin-bottom: 2px;
+  }
+  .msg-bullet {
+    display: block;
+    font-size: 12px;
+    margin-top: 1px;
+  }
+  .msg-link {
+    color: #027eb5;
+    text-decoration: underline;
+  }
+
+  /* TEMPLATE MARKER (for outbound BFC templates) */
+  .template-tag {
+    font-size: 9px;
+    font-weight: 700;
+    color: #128c7e;
+    background: rgba(18,140,126,0.08);
+    padding: 1px 5px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 4px;
+    letter-spacing: 0.4px;
+  }
+
+  /* QUICK REPLY BUTTONS — attached below bot bubble */
+  .qr-group {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    max-width: 80%;
+    margin-top: -1px;
+    margin-bottom: 6px;
+    gap: 1px;
+  }
+  .qr-btn {
+    background: #fff;
+    color: #027eb5;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    padding: 8px 10px;
+    border-radius: 5px;
+    box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+    border: none;
+    cursor: pointer;
+  }
+  .qr-btn-icon {
+    font-size: 11px;
+    margin-right: 4px;
+  }
+
+  /* CTA — single big button (used for Flow trigger) */
+  .cta-btn {
+    background: #fff;
+    color: #027eb5;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-align: center;
+    padding: 9px 12px;
+    border-radius: 6px;
+    box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+    border-top: 1px solid #e9edef;
+    align-self: flex-start;
+    max-width: 80%;
+    width: 100%;
+    margin-top: -2px;
+    margin-bottom: 6px;
+  }
+
+  /* ATTACHMENT BUBBLES */
+  .att-img {
+    padding: 3px 3px 4px 3px;
+    background: #DCF8C6;
+    border-radius: 7px;
+    border-top-right-radius: 0;
+    box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+    align-self: flex-end;
+    max-width: 70%;
+  }
+  .att-img-thumb {
+    width: 180px;
+    height: 120px;
+    border-radius: 5px;
+    background: linear-gradient(135deg, #c0c0c0 25%, #d8d8d8 25%, #d8d8d8 50%, #c0c0c0 50%, #c0c0c0 75%, #d8d8d8 75%);
+    background-size: 14px 14px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .att-img-thumb-label {
+    background: rgba(255,255,255,0.85);
+    padding: 4px 8px;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+  .att-img-meta {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
+    font-size: 9.5px;
+    color: #667781;
+    padding: 2px 5px 0;
+  }
+
+  .att-pdf {
+    background: #DCF8C6;
+    padding: 7px 8px 4px 8px;
+    border-radius: 7px;
+    border-top-right-radius: 0;
+    box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
+    align-self: flex-end;
+    max-width: 75%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .pdf-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,0,0,0.05);
+    border-radius: 6px;
+    padding: 6px 8px;
+  }
+  .pdf-icon {
+    width: 28px; height: 32px;
+    background: #fff;
+    border-radius: 3px;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    color: #d93025;
+    font-size: 8px;
+    font-weight: 800;
+    padding-bottom: 4px;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+  }
+  .pdf-icon::after {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 7px; height: 7px;
+    background: linear-gradient(225deg, #f5f5f5 50%, transparent 50%);
+  }
+  .pdf-info { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+  .pdf-name { font-size: 11px; font-weight: 600; color: #111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pdf-size { font-size: 9.5px; color: #667781; }
+
+  /* Bot PDF attachment (e.g., generated invoice) */
+  .att-pdf.bot {
+    background: #fff;
+    align-self: flex-start;
+    border-top-left-radius: 0;
+    border-top-right-radius: 7px;
+  }
+
+  /* INPUT BAR */
+  .input-bar {
+    height: 50px;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    padding: 6px 8px;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .input-box {
+    flex: 1;
+    background: #fff;
+    border-radius: 24px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    gap: 10px;
+    font-size: 12px;
+    color: #919191;
+  }
+  .input-icon {
+    color: #54656f;
+    font-size: 18px;
+  }
+  .input-text { flex: 1; }
+  .mic-btn {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: #128C7E;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  /* BOTTOM SHEET */
+  .sheet-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 5;
+    border-radius: 22px;
+  }
+  .sheet {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    z-index: 6;
+    padding: 12px 0 8px 0;
+    max-height: 75%;
+    overflow-y: auto;
+  }
+  .sheet::-webkit-scrollbar { width: 0; }
+  .sheet-handle {
+    width: 40px;
+    height: 4px;
+    background: #d1d5db;
+    border-radius: 4px;
+    margin: 0 auto 10px;
+  }
+  .sheet-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111;
+    padding: 0 16px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .sheet-close { color: #6b7280; font-size: 18px; line-height: 1; cursor: pointer; }
+  .sheet-section-label {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #667781;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 16px 4px;
+  }
+  .sheet-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .sheet-row:last-child { border-bottom: 0; }
+  .sheet-row-icon {
+    font-size: 16px;
+    width: 22px;
+    text-align: center;
+  }
+  .sheet-row-text {
+    flex: 1;
+    font-size: 12.5px;
+    color: #111;
+  }
+  .sheet-row-meta {
+    font-size: 10.5px;
+    color: #667781;
+    margin-top: 1px;
+  }
+  .sheet-row-chev {
+    color: #c4c4c4;
+    font-size: 12px;
+  }
+
+  /* FLOW BOTTOM SHEET (form) */
+  .flow-sheet {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    z-index: 6;
+    padding: 14px 16px 16px;
+    max-height: 78%;
+  }
+  .flow-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f3f4f6;
+    margin-bottom: 14px;
+  }
+  .flow-header-back { color: #54656f; font-size: 16px; }
+  .flow-header-title { font-size: 13px; font-weight: 700; color: #111; }
+  .flow-header-step { font-size: 10.5px; color: #667781; }
+  .flow-field {
+    margin-bottom: 12px;
+  }
+  .flow-field-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 4px;
+  }
+  .flow-input {
+    width: 100%;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 11.5px;
+    color: #111;
+  }
+  .flow-input.dropdown {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .flow-input.dropdown::after {
+    content: '▾';
+    color: #667781;
+    font-size: 10px;
+  }
+  .flow-input.filled { color: #111; font-weight: 500; }
+  .flow-input.placeholder { color: #9ca3af; }
+  .flow-submit {
+    width: 100%;
+    background: #128C7E;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    padding: 11px;
+    border-radius: 8px;
+    margin-top: 6px;
+    border: none;
+  }
+
+  /* SYSTEM / NEUTRAL MESSAGE */
+  .sys-msg {
+    align-self: center;
+    background: rgba(225,245,254,0.92);
+    color: #54656f;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    margin: 4px 0;
+  }
+
+  /* SUMMARY FOOTER */
+  .footer-note {
+    max-width: 1500px;
+    margin: 50px auto 0;
+    padding: 22px 24px;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    color: #374151;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .footer-note h3 {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #111;
+  }
+  .footer-note ul { padding-left: 20px; margin-top: 6px; }
+  .footer-note li { margin-bottom: 4px; }
+
+
+
+/* Override page-header inside mocks since combined doc has its own */
+.section-block.mocks-bg .page-header { display: none; }
+
+/* Tighter mocks grid in combined doc context */
+.section-block.mocks-bg .grid {
+  margin: 0 auto;
+}
+.section-block.mocks-bg .footer-note {
+  margin-top: 50px;
+}
+
+/* ============================================================
+   PRINT
+   ============================================================ */
+@media print {
+  .top-nav { display: none; }
+  .section-block { page-break-before: always; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="nav-brand">BFC Next <span class="nav-brand-tag">Seller UX v1 MVP</span></div>
+  <div class="nav-links">
+    <a href="#storyboard"><span class="step-num">01</span>Storyboard</a>
+    <a href="#mocks"><span class="step-num">02</span>WhatsApp Mocks</a>
+    <a href="#catalog"><span class="step-num">03</span>WABA Catalog</a>
+  </div>
+</nav>
+
+<header class="doc-header">
+  <h1>BiofuelCircle Next — WhatsApp Seller UX</h1>
+  <div class="doc-subtitle">
+    Conversational spec, high-fidelity visual mocks, and the complete WABA template catalog
+    for the v1 MVP seller channel.
+  </div>
+  <div class="meta-row">
+    <span class="chip">Manufacturer persona</span>
+    <span class="chip">WhatsApp Business API + Flows</span>
+    <span class="chip">Sequential single-deal model</span>
+    <span class="chip">Happy path only</span>
+    <span class="chip">English only</span>
+  </div>
+</header>
+
+<!-- ====================== SECTION 1: STORYBOARD ====================== -->
+<section id="storyboard" class="section-block alt">
+  <div class="section-header alt">
+    <span class="section-number">01</span>
+    <span class="section-title">Storyboard</span>
+    <div class="section-sub">Frame-by-frame conversational spec — copy, UI elements, transitions, and state for each of the 10 screens.</div>
+  </div>
+  <div class="doc-prose">
+<h1>BiofuelCircle "Next" — WhatsApp Seller UX Storyboard (v1)</h1>
+<p><strong>Persona:</strong> Unorganized biomass manufacturer (briquette/pellet maker)
+<strong>Channel:</strong> WhatsApp Business API + WhatsApp Flows
+<strong>Scope:</strong> Happy path only · Sequential single-deal model · English only · v1 MVP</p>
+<hr />
+<h2>Locked Design Assumptions</h2>
+<ul>
+<li>One active deal per manufacturer at any time. New broadcasts are only pushed after current deal closes.</li>
+<li>Onboarding is light and one-shot. Captures the minimum to enable broadcast targeting; richer fields (GSTIN, bank, KYC) are collected just-in-time before first invoice/payment.</li>
+<li>Counter-price flow is in v1.</li>
+<li>Main menu surfaces the current active deal plus past deals history.</li>
+<li>Trader-side ops surface is out of scope for these mocks.</li>
+</ul>
+<hr />
+<h2>Onboarding minimums</h2>
+<p>To enable broadcast targeting, the first Flow captures:</p>
+<ol>
+<li>Company name</li>
+<li>Primary commodity (Soybean Briquettes / Groundnut Shell / Mustard Husk / Biomass Pellets / Mixed)</li>
+<li>Monthly capacity bucket (&lt;100 MT / 100–500 MT / 500+ MT)</li>
+<li>District / state</li>
+<li>Years in operation</li>
+</ol>
+<p>Everything else (GSTIN, bank details, lab certs, KYC) is collected progressively at the moment it becomes necessary.</p>
+<hr />
+<h2>Screen 1 — First "Hi" / Cold start</h2>
+<p><strong>Trigger:</strong> Unknown number sends any text to the BFC number.</p>
+<p><strong>Chat sequence:</strong></p>
+<ul>
+<li><em>User → Bot:</em> "Hi"</li>
+<li><em>Bot → User:</em> "👋 Welcome to BiofuelCircle. We connect biomass manufacturers with large industrial buyers across India. I don't recognise this number — are you a manufacturer looking to sell briquettes or pellets?"</li>
+<li><em>Quick replies (max 3):</em> <code>Yes, I sell</code> · <code>No, I buy</code> · <code>Just looking</code></li>
+</ul>
+<p><strong>State:</strong> No shadow profile yet. Phone number captured, conversation logged.</p>
+<p><strong>Next state on <code>Yes, I sell</code>:</strong> advance to Screen 2.</p>
+<hr />
+<h2>Screen 2 — Onboarding Flow opens</h2>
+<p><strong>Trigger:</strong> User taps <code>Yes, I sell</code> on Screen 1.</p>
+<p><strong>Chat sequence:</strong></p>
+<ul>
+<li><em>Bot → User:</em> "Great. Quick setup — 5 questions, takes about a minute. Tap below to start."</li>
+<li><em>Flow CTA button:</em> <code>Start Setup</code></li>
+</ul>
+<p><strong>On tap → WhatsApp Flow opens as bottom sheet:</strong></p>
+<ul>
+<li><strong>Flow Screen 1 of 2</strong> — header "Tell us about your business"</li>
+<li>Text input: Company name</li>
+<li>Dropdown: Primary commodity (5 options)</li>
+<li>Dropdown: Monthly capacity (3 bucketed options)</li>
+<li><strong>Flow Screen 2 of 2</strong> — header "Where do you operate?"</li>
+<li>Dropdown: State (multi-select up to 3)</li>
+<li>Dropdown: District</li>
+<li>Number input: Years in operation</li>
+<li>CTA: <code>Submit</code></li>
+</ul>
+<p><strong>On submit → Flow closes, returns to chat:</strong></p>
+<ul>
+<li><em>Bot → User:</em> "Thanks, Shree Agro Industries 🏭. You're set up for <strong>Soybean Briquettes</strong>, capacity <strong>100–500 MT/month</strong>, based in <strong>Latur, Maharashtra</strong>. We'll notify you when a buying requirement matches your profile."</li>
+<li><em>Quick replies:</em> <code>☰ Main Menu</code></li>
+</ul>
+<p><strong>State:</strong> Manufacturer profile created. Ready to receive broadcasts.</p>
+<hr />
+<h2>Screen 3 — Broadcast received</h2>
+<p><strong>Trigger:</strong> Trader fires a new buying requirement targeting this manufacturer's profile. Outbound WABA template (utility category).</p>
+<p><strong>Chat sequence:</strong></p>
+<ul>
+<li><em>Bot → User (template push):</em><blockquote>
+<p>🟢 <strong>New Buying Requirement</strong>
+We're looking to buy <strong>Soybean Briquettes</strong> (Min 3200 kcal/kg).
+• Base Price: <strong>₹4,000 / MT</strong> (Ex-works)
+• Delivery window: <strong>June 15 – June 30</strong>
+• Full terms: bfc.link/req-991</p>
+<p>Are you interested in supplying this month?</p>
+</blockquote>
+</li>
+<li><em>Quick replies:</em> <code>Yes, interested</code> · <code>No, skip</code></li>
+</ul>
+<p><strong>State:</strong> Broadcast logged against profile. Waiting on response. 24-hour session window opens on user reply.</p>
+<hr />
+<h2>Screen 4 — Quantity + price decision</h2>
+<p><strong>Trigger:</strong> User taps <code>Yes, interested</code>.</p>
+<p><strong>Chat sequence:</strong></p>
+<ul>
+<li><em>User → Bot:</em> "Yes, interested"</li>
+<li><em>Bot → User:</em> "How many Metric Tons can you commit for this requirement? (Type only the number.)"</li>
+<li><em>User → Bot:</em> "120"</li>
+<li><em>Bot → User:</em> "Got it — <strong>120 MT</strong>. Target price is <strong>₹4,000 / MT</strong>. Do you accept this price or want to counter?"</li>
+<li><em>Quick replies:</em> <code>Accept ₹4,000</code> · <code>Counter price</code></li>
+</ul>
+<p><strong>State:</strong> Quantity committed (pending price). Time-limited offer — auto-expires in 4 hours if no response.</p>
+<hr />
+<h2>Screen 5 — Counter-price flow</h2>
+<p><strong>Trigger:</strong> User taps <code>Counter price</code> on Screen 4.</p>
+<p><strong>Chat sequence:</strong></p>
+<ul>
+<li><em>User → Bot:</em> "Counter price"</li>
+<li><em>Bot → User:</em> "What's your asking price per MT? (Type only the number.)"</li>
+<li><em>User → Bot:</em> "4200"</li>
+<li><em>Bot → User:</em> "Submitting your offer: <strong>120 MT @ ₹4,200 / MT</strong> to the Trader. You'll hear back within 24 hours."</li>
+</ul>
+<p><strong>Async — Trader response lands later (new template):</strong></p>
+<ul>
+<li><em>Bot → User (template push):</em><blockquote>
+<p>✅ <strong>Counter Accepted</strong>
+Trader has accepted your offer.
+• Quantity: <strong>120 MT</strong>
+• Final price: <strong>₹4,150 / MT</strong> (compromise)
+• Deal ID: <strong>#8842</strong></p>
+<p>Ready to start dispatching?</p>
+</blockquote>
+</li>
+<li><em>Quick replies:</em> <code>Start dispatch</code> · <code>☰ Main Menu</code></li>
+</ul>
+<p><strong>State:</strong> Deal confirmed. Active deal slot occupied. No new broadcasts will be pushed until this deal completes.</p>
+<p><strong>Alternate branch (not in happy path mocks):</strong> Trader rejects → user offered base price one more time, or deal closes.</p>
+<hr />
+<h2>Screen 6 — Dispatch: vehicle + weighbridge</h2>
+<p><strong>Trigger:</strong> User taps <code>Start dispatch</code> on Screen 5.</p>
+<p><strong>Chat sequence:</strong></p>
+<ul>
+<li><em>Bot → User:</em> "Send your truck's vehicle number when it's loaded and ready to leave your factory."</li>
+<li><em>User → Bot:</em> "MH-13-DX-5678"</li>
+<li><em>Bot → User:</em> "Vehicle <strong>MH-13-DX-5678</strong> registered against Deal #8842. Once the truck crosses your factory scale, take a photo of the weighbridge slip or upload the PDF."</li>
+<li><em>User → Bot:</em> [image attachment — photo of weighbridge slip]</li>
+<li><em>Bot → User:</em> "Slip received. Reading: <strong>16.5 MT</strong>. Now upload the <strong>E-Way Bill</strong> PDF, or type the 12-digit E-Way Bill number."</li>
+</ul>
+<p><strong>State:</strong> Vehicle registered. Factory weight captured (16.5 MT). Awaiting E-Way Bill.</p>
+<hr />
+<h2>Screen 7 — E-Way Bill + in-transit confirmation</h2>
+<p><strong>Trigger:</strong> User uploads E-Way Bill.</p>
+<p><strong>Chat sequence:</strong></p>
+<ul>
+<li><em>User → Bot:</em> [PDF attachment — Eway_Bill_MH13.pdf]</li>
+<li><em>Bot → User:</em><blockquote>
+<p>🚛 <strong>Truck MH-13-DX-5678 is now In-Transit</strong>
+• Factory Weight: <strong>16.5 MT</strong>
+• Remaining Deal Balance: <strong>103.5 MT</strong></p>
+<p>We'll message you when the buyer acknowledges delivery.</p>
+</blockquote>
+</li>
+<li><em>Quick replies:</em> <code>☰ Main Menu</code></li>
+</ul>
+<p><strong>State:</strong> Dispatch leg created against Deal #8842. Status: in_transit. Document IDs bound to deal: weighbridge_slip_001, eway_bill_001.</p>
+<hr />
+<h2>Screen 8 — Delivery cleared + invoice + early payout</h2>
+<p><strong>Trigger (async):</strong> Buyer's plant acknowledges unload and submits weight + quality readings. New template push opens a fresh 24-hour session.</p>
+<p><strong>Chat sequence:</strong></p>
+<ul>
+<li><em>Bot → User (template push):</em><blockquote>
+<p>🟢 <strong>Delivery Unloaded</strong>
+Truck MH-13-DX-5678 cleared at the buyer's plant.
+• Your Factory Weight: <strong>16.5 MT</strong>
+• Buyer Weight: <strong>16.2 MT</strong>
+• Quality Adjustment: <strong>−₹150 / MT</strong> (12% moisture exception)
+• Final Payable: <strong>₹64,800</strong></p>
+<p>Would you like to upload your tax invoice, or have us generate a platform auto-invoice?</p>
+</blockquote>
+</li>
+<li><em>Quick replies:</em> <code>Upload my invoice</code> · <code>Generate auto-invoice</code></li>
+</ul>
+<p><strong>On <code>Generate auto-invoice</code>:</strong></p>
+<ul>
+<li><em>User → Bot:</em> "Generate auto-invoice"</li>
+<li><em>Bot → User:</em> "Generating commercial invoice ⏳"</li>
+</ul>
+<p><strong>(Just-in-time GSTIN capture — if not already on file)</strong></p>
+<ul>
+<li><em>Bot → User:</em> "We need your GSTIN to issue a compliant invoice. Type your 15-character GSTIN below."</li>
+<li><em>User → Bot:</em> "27ABCDE1234F1Z5"</li>
+</ul>
+<p><strong>Continued:</strong></p>
+<ul>
+<li><em>Bot → User:</em> [PDF attachment — INV_MH13DX5678.pdf]<blockquote>
+<p>Your tax invoice is generated and pushed to the buyer's accounting module.</p>
+</blockquote>
+</li>
+<li><em>Bot → User:</em><blockquote>
+<p>💰 <strong>Early Payout Available</strong>
+Standard payment cycle: <strong>90 days</strong> (₹64,800 by Aug 28)
+Early payout option: <strong>₹62,500 within 24 hours</strong> (3.5% discount)</p>
+</blockquote>
+</li>
+<li><em>Quick replies:</em> <code>Request early payout</code> · <code>Wait for standard</code> · <code>☰ Main Menu</code></li>
+</ul>
+<p><strong>State:</strong> Dispatch completed. Final settlement computed (with quality adjustment audit trail). Invoice issued. Payment options surfaced.</p>
+<hr />
+<h2>Screen 9 — Main Menu (List Message bottom sheet)</h2>
+<p><strong>Trigger:</strong> User taps <code>☰ Main Menu</code> from anywhere in the conversation.</p>
+<p><strong>UI:</strong> WhatsApp List Message — bottom sheet slides up over dimmed chat.</p>
+<p><strong>Header:</strong> "Main Menu"</p>
+<p><strong>Sections + items:</strong></p>
+<ul>
+<li><strong>Active Deal</strong></li>
+<li>🚛 Deal #8842 — Soybean Briquettes, Status: In Transit</li>
+<li><strong>Quick Actions</strong></li>
+<li>🧾 Upload Invoice / Weighbridge Slip</li>
+<li>💰 Check Payment Status</li>
+<li>📊 Update Monthly Capacity</li>
+<li><strong>History</strong></li>
+<li>📂 View Past Deals (12)</li>
+<li><strong>Account</strong></li>
+<li>👤 My Profile</li>
+<li>💬 Talk to Account Manager</li>
+</ul>
+<p><strong>State:</strong> Read-only navigation surface. Tapping an item either fires a bot prompt (for actions) or opens a List Message / Flow (for sub-views).</p>
+<hr />
+<h2>Screen 10 — Past Deals view</h2>
+<p><strong>Trigger:</strong> User taps <code>📂 View Past Deals (12)</code> on Screen 9.</p>
+<p><strong>UI:</strong> Second-level WhatsApp List Message — shows last 5 deals with status, scroll for more.</p>
+<p><strong>Header:</strong> "Past Deals"</p>
+<p><strong>List items:</strong></p>
+<ul>
+<li>🟢 Deal #8821 — 100 MT · Closed · Paid ₹4,02,500 · Apr 2026</li>
+<li>🟢 Deal #8794 — 80 MT · Closed · Paid ₹3,20,000 · Mar 2026</li>
+<li>🟢 Deal #8761 — 120 MT · Closed · Paid ₹4,80,000 · Feb 2026</li>
+<li>🟡 Deal #8729 — 60 MT · Closed · Quality Dispute · ₹2,28,000 · Jan 2026</li>
+<li>🟢 Deal #8702 — 100 MT · Closed · Paid ₹4,00,000 · Dec 2025</li>
+</ul>
+<p><strong>On tap → Bot sends deal summary message:</strong></p>
+<ul>
+<li><em>Bot → User:</em><blockquote>
+<p>📂 <strong>Deal #8821 Summary</strong>
+• Commodity: Soybean Briquettes
+• Quantity: 100 MT (across 6 dispatches)
+• Final settled: ₹4,02,500
+• Closed: April 18, 2026
+• Quality adjustments: ₹7,500 (across 2 dispatches)
+• Documents: 6 weighbridge slips, 6 E-way bills, 1 invoice</p>
+</blockquote>
+</li>
+<li><em>Quick replies:</em> <code>Download invoice</code> · <code>☰ Main Menu</code></li>
+</ul>
+<p><strong>State:</strong> Read-only historical view. Useful for: reconciliation, audit, demonstrating reliability to BFC ops.</p>
+<hr />
+<h2>Conversational state machine — happy path summary</h2>
+<pre><code>[New number]
+    → Screen 1 (Hi / recognition)
+    → Screen 2 (Flow onboarding)
+    → [Profile created, awaiting broadcast]
+
+[Broadcast trigger]
+    → Screen 3 (Broadcast received)
+    → Screen 4 (Quantity + price decision)
+        ├─ Accept → Screen 6 (dispatch)
+        └─ Counter → Screen 5 (counter flow)
+                    → [Trader responds]
+                    → Screen 6 (dispatch)
+
+[Dispatch loop — repeats per truck until deal balance = 0]
+    → Screen 6 (vehicle + weighbridge)
+    → Screen 7 (E-way + in-transit)
+    → [Buyer unload trigger]
+    → Screen 8 (cleared + invoice + payout)
+    → [If balance &gt; 0, loop back to Screen 6]
+    → [If balance = 0, deal closes → next broadcast eligible]
+
+[Any time]
+    → Screen 9 (Main Menu) ← / → Screen 10 (Past Deals)
+</code></pre>
+<hr />
+<h2>Out of scope (deferred to v1.1+)</h2>
+<ul>
+<li>Counter-rejection branch</li>
+<li>Quality exception declaration flow at offer time</li>
+<li>Multi-deal navigation (intentionally — sequential model)</li>
+<li>Dispute filing flow</li>
+<li>Voice note input</li>
+<li>Marathi/Hindi localisation</li>
+<li>Trader-side ops dashboard</li>
+<li>PWA companion surface</li>
+<li>Re-engagement templates for inactive sellers</li>
+</ul>
+  </div>
+</section>
+
+<!-- ====================== SECTION 2: WHATSAPP MOCKS ====================== -->
+<section id="mocks" class="section-block mocks-bg">
+  <div class="section-header">
+    <span class="section-number">02</span>
+    <span class="section-title">WhatsApp Mocks</span>
+    <div class="section-sub">High-fidelity visual rendering of all 10 conversational moments. Phone-frame artboard — screenshot any tile for stakeholder decks.</div>
+  </div>
+
+
+
+
+<div class="grid">
+
+  <!-- ============================== SCREEN 1 ============================== -->
+  <div class="cell">
+    <div class="phone"><div class="screen">
+      <div class="statusbar">
+        <span>9:41</span>
+        <div class="statusbar-right">
+          <div class="signal"></div>
+          <div class="battery"><div class="battery-fill"></div></div>
+        </div>
+      </div>
+      <div class="header">
+        <span class="back-arrow">←</span>
+        <div class="avatar">BF</div>
+        <div class="header-info">
+          <div class="header-name">BiofuelCircle Partner <span class="verified-tick">✓</span></div>
+          <div class="header-status">Business Account</div>
+        </div>
+        <div class="header-icons">
+          <span class="icon-btn">📹</span>
+          <span class="icon-btn">📞</span>
+          <span class="icon-btn">⋮</span>
+        </div>
+      </div>
+      <div class="chat">
+        <div class="date-sep">TODAY</div>
+        <div class="msg user">
+          Hi
+          <div class="meta">9:41 AM <span class="ticks">✓✓</span></div>
+        </div>
+        <div class="msg bot">
+          👋 Welcome to <b>BiofuelCircle</b>.<br><br>
+          We connect biomass manufacturers with large industrial buyers across India.<br><br>
+          I don't recognise this number — are you a manufacturer looking to sell briquettes or pellets?
+          <div class="meta">9:41 AM</div>
+        </div>
+        <div class="qr-group">
+          <div class="qr-btn">Yes, I sell</div>
+          <div class="qr-btn">No, I buy</div>
+          <div class="qr-btn">Just looking</div>
+        </div>
+      </div>
+      <div class="input-bar">
+        <span class="input-icon">😊</span>
+        <div class="input-box">
+          <span class="input-text">Message</span>
+          <span class="input-icon">📎</span>
+          <span class="input-icon">📷</span>
+        </div>
+        <div class="mic-btn">🎤</div>
+      </div>
+    </div></div>
+    <div class="cell-label">Screen 1 — First "Hi"</div>
+    <div class="cell-sublabel">Cold start. Unknown number is recognised; bot offers a binary intent capture.</div>
+  </div>
+
+  <!-- ============================== SCREEN 2 ============================== -->
+  <div class="cell">
+    <div class="phone"><div class="screen">
+      <div class="statusbar">
+        <span>9:42</span>
+        <div class="statusbar-right"><div class="signal"></div><div class="battery"><div class="battery-fill"></div></div></div>
+      </div>
+      <div class="header">
+        <span class="back-arrow">←</span>
+        <div class="avatar">BF</div>
+        <div class="header-info">
+          <div class="header-name">BiofuelCircle Partner <span class="verified-tick">✓</span></div>
+          <div class="header-status">Business Account</div>
+        </div>
+        <div class="header-icons"><span class="icon-btn">📹</span><span class="icon-btn">📞</span><span class="icon-btn">⋮</span></div>
+      </div>
+      <div class="chat" style="filter: brightness(0.85);">
+        <div class="msg user">
+          Yes, I sell
+          <div class="meta">9:42 AM <span class="ticks">✓✓</span></div>
+        </div>
+        <div class="msg bot">
+          Great. Quick setup — 5 questions, takes about a minute. Tap below to start.
+          <div class="meta">9:42 AM</div>
+        </div>
+        <div class="cta-btn">Start Setup</div>
+      </div>
+      <div class="sheet-overlay"></div>
+      <div class="flow-sheet">
+        <div class="flow-header">
+          <span class="flow-header-back">←</span>
+          <span class="flow-header-title">Tell us about your business</span>
+          <span class="flow-header-step">1 of 2</span>
+        </div>
+        <div class="flow-field">
+          <div class="flow-field-label">Company name</div>
+          <div class="flow-input filled">Shree Agro Industries</div>
+        </div>
+        <div class="flow-field">
+          <div class="flow-field-label">Primary commodity</div>
+          <div class="flow-input dropdown filled">Soybean Briquettes</div>
+        </div>
+        <div class="flow-field">
+          <div class="flow-field-label">Monthly capacity</div>
+          <div class="flow-input dropdown filled">100 – 500 MT / month</div>
+        </div>
+        <button class="flow-submit">Continue</button>
+      </div>
+    </div></div>
+    <div class="cell-label">Screen 2 — Onboarding Flow (1 of 2)</div>
+    <div class="cell-sublabel">WhatsApp Flow opens as a bottom sheet. Light, 5-field one-shot capture.</div>
+  </div>
+
+  <!-- ============================== SCREEN 3 ============================== -->
+  <div class="cell">
+    <div class="phone"><div class="screen">
+      <div class="statusbar">
+        <span>10:15</span>
+        <div class="statusbar-right"><div class="signal"></div><div class="battery"><div class="battery-fill"></div></div></div>
+      </div>
+      <div class="header">
+        <span class="back-arrow">←</span>
+        <div class="avatar">BF</div>
+        <div class="header-info">
+          <div class="header-name">BiofuelCircle Partner <span class="verified-tick">✓</span></div>
+          <div class="header-status">Business Account</div>
+        </div>
+        <div class="header-icons"><span class="icon-btn">📹</span><span class="icon-btn">📞</span><span class="icon-btn">⋮</span></div>
+      </div>
+      <div class="chat">
+        <div class="msg bot">
+          Thanks, <b>Shree Agro Industries</b> 🏭<br><br>
+          You're set up for <b>Soybean Briquettes</b>, capacity <b>100–500 MT/month</b>, based in <b>Latur, Maharashtra</b>.<br><br>
+          We'll notify you when a buying requirement matches your profile.
+          <div class="meta">9:44 AM</div>
+        </div>
+        <div class="qr-group">
+          <div class="qr-btn">☰ Main Menu</div>
+        </div>
+        <div class="date-sep">3 DAYS LATER</div>
+        <div class="msg bot">
+          <span class="template-tag">BFC · BROADCAST</span>
+          <div class="msg-title">🟢 New Buying Requirement</div>
+          We're looking to buy <b>Soybean Briquettes</b> (Min 3200 kcal/kg).<br>
+          <span class="msg-bullet">• Base Price: <b>₹4,000 / MT</b> (Ex-works)</span>
+          <span class="msg-bullet">• Delivery: <b>June 15 – June 30</b></span>
+          <span class="msg-bullet">• Full terms: <span class="msg-link">bfc.link/req-991</span></span>
+          <br><br>
+          Are you interested in supplying this month?
+          <div class="meta">10:15 AM</div>
+        </div>
+        <div class="qr-group">
+          <div class="qr-btn">Yes, interested</div>
+          <div class="qr-btn">No, skip</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="cell-label">Screen 3 — Broadcast Received</div>
+    <div class="cell-sublabel">Trader fires aggregate buy requirement. Targeted via onboarding profile.</div>
+  </div>
+
+  <!-- ============================== SCREEN 4 ============================== -->
+  <div class="cell">
+    <div class="phone"><div class="screen">
+      <div class="statusbar">
+        <span>10:17</span>
+        <div class="statusbar-right"><div class="signal"></div><div class="battery"><div class="battery-fill"></div></div></div>
+      </div>
+      <div class="header">
+        <span class="back-arrow">←</span>
+        <div class="avatar">BF</div>
+        <div class="header-info">
+          <div class="header-name">BiofuelCircle Partner <span class="verified-tick">✓</span></div>
+          <div class="header-status">Business Account</div>
+        </div>
+        <div class="header-icons"><span class="icon-btn">📹</span><span class="icon-btn">📞</span><span class="icon-btn">⋮</span></div>
+      </div>
+      <div class="chat">
+        <div class="msg user">
+          Yes, interested
+          <div class="meta">10:16 AM <span class="ticks">✓✓</span></div>
+        </div>
+        <div class="msg bot">
+          How many Metric Tons can you commit for this requirement?<br><br>
+          <i style="color:#667781;font-size:11.5px;">(Type only the number.)</i>
+          <div class="meta">10:16 AM</div>
+        </div>
+        <div class="msg user">
+          120
+          <div class="meta">10:17 AM <span class="ticks">✓✓</span></div>
+        </div>
+        <div class="msg bot">
+          Got it — <b>120 MT</b>.<br>
+          Target price is <b>₹4,000 / MT</b>.<br><br>
+          Do you accept this price or want to counter?
+          <div class="meta">10:17 AM</div>
+        </div>
+        <div class="qr-group">
+          <div class="qr-btn">Accept ₹4,000</div>
+          <div class="qr-btn">Counter price</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="cell-label">Screen 4 — Quantity & Price Decision</div>
+    <div class="cell-sublabel">Free-text quantity, then binary price decision. Counter is full flow.</div>
+  </div>
+
+  <!-- ============================== SCREEN 5 ============================== -->
+  <div class="cell">
+    <div class="phone"><div class="screen">
+      <div class="statusbar">
+        <span>4:48</span>
+        <div class="statusbar-right"><div class="signal"></div><div class="battery"><div class="battery-fill"></div></div></div>
+      </div>
+      <div class="header">
+        <span class="back-arrow">←</span>
+        <div class="avatar">BF</div>
+        <div class="header-info">
+          <div class="header-name">BiofuelCircle Partner <span class="verified-tick">✓</span></div>
+          <div class="header-status">Business Account</div>
+        </div>
+        <div class="header-icons"><span class="icon-btn">📹</span><span class="icon-btn">📞</span><span class="icon-btn">⋮</span></div>
+      </div>
+      <div class="chat">
+        <div class="msg user">Counter price
+          <div class="meta">10:18 AM <span class="ticks">✓✓</span></div>
+        </div>
+        <div class="msg bot">
+          What's your asking price per MT? <i style="color:#667781;font-size:11.5px;">(Type only the number.)</i>
+          <div class="meta">10:18 AM</div>
+        </div>
+        <div class="msg user">4200
+          <div class="meta">10:19 AM <span class="ticks">✓✓</span></div>
+        </div>
+        <div class="msg bot">
+          Submitting your offer: <b>120 MT @ ₹4,200 / MT</b> to the Trader.<br><br>
+          You'll hear back within 24 hours.
+          <div class="meta">10:19 AM</div>
+        </div>
+        <div class="date-sep">LATER</div>
+        <div class="msg bot">
+          <span class="template-tag">BFC · COUNTER RESPONSE</span>
+          <div class="msg-title">✅ Counter Accepted</div>
+          Trader has accepted your offer.<br>
+          <span class="msg-bullet">• Quantity: <b>120 MT</b></span>
+          <span class="msg-bullet">• Final price: <b>₹4,150 / MT</b> (compromise)</span>
+          <span class="msg-bullet">• Deal ID: <b>#8842</b></span>
+          <br><br>Ready to start dispatching?
+          <div class="meta">4:48 PM</div>
+        </div>
+        <div class="qr-group">
+          <div class="qr-btn">Start dispatch</div>
+          <div class="qr-btn">☰ Main Menu</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="cell-label">Screen 5 — Counter-Price Flow</div>
+    <div class="cell-sublabel">Counter submitted, async Trader response lands later via template push.</div>
+  </div>
+
+  <!-- ============================== SCREEN 6 ============================== -->
+  <div class="cell">
+    <div class="phone"><div class="screen">
+      <div class="statusbar">
+        <span>11:24</span>
+        <div class="statusbar-right"><div class="signal"></div><div class="battery"><div class="battery-fill"></div></div></div>
+      </div>
+      <div class="header">
+        <span class="back-arrow">←</span>
+        <div class="avatar">BF</div>
+        <div class="header-info">
+          <div class="header-name">BiofuelCircle Partner <span class="verified-tick">✓</span></div>
+          <div class="header-status">Business Account</div>
+        </div>
+        <div class="header-icons"><span class="icon-btn">📹</span><span class="icon-btn">📞</span><span class="icon-btn">⋮</span></div>
+      </div>
+      <div class="chat">
+        <div class="msg bot">
+          Send your truck's vehicle number when it's loaded and ready to leave your factory.
+          <div class="meta">11:20 AM</div>
+        </div>
+        <div class="msg user">MH-13-DX-5678
+          <div class="meta">11:21 AM <span class="ticks">✓✓</span></div>
+        </div>
+        <div class="msg bot">
+          Vehicle <b>MH-13-DX-5678</b> registered against Deal #8842.<br><br>
+          Once the truck crosses your factory scale, take a photo of the weighbridge slip or upload the PDF.
+          <div class="meta">11:21 AM</div>
+        </div>
+        <div class="att-img">
+          <div class="att-img-thumb">
+            <div class="att-img-thumb-label">Weighbridge Slip<br>16.5 MT</div>
+          </div>
+          <div class="att-img-meta">11:23 AM <span class="ticks">✓✓</span></div>
+        </div>
+        <div class="msg bot">
+          Slip received. Reading: <b>16.5 MT</b>.<br><br>
+          Now upload the <b>E-Way Bill</b> PDF, or type the 12-digit E-Way Bill number.
+          <div class="meta">11:24 AM</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="cell-label">Screen 6 — Dispatch: Vehicle &amp; Weighbridge</div>
+    <div class="cell-sublabel">Vehicle registered, weighbridge photo uploaded via WhatsApp camera.</div>
+  </div>
+
+  <!-- ============================== SCREEN 7 ============================== -->
+  <div class="cell">
+    <div class="phone"><div class="screen">
+      <div class="statusbar">
+        <span>11:28</span>
+        <div class="statusbar-right"><div class="signal"></div><div class="battery"><div class="battery-fill"></div></div></div>
+      </div>
+      <div class="header">
+        <span class="back-arrow">←</span>
+        <div class="avatar">BF</div>
+        <div class="header-info">
+          <div class="header-name">BiofuelCircle Partner <span class="verified-tick">✓</span></div>
+          <div class="header-status">Business Account</div>
+        </div>
+        <div class="header-icons"><span class="icon-btn">📹</span><span class="icon-btn">📞</span><span class="icon-btn">⋮</span></div>
+      </div>
+      <div class="chat">
+        <div class="msg bot">
+          Now upload the <b>E-Way Bill</b> PDF, or type the 12-digit E-Way Bill number.
+          <div class="meta">11:24 AM</div>
+        </div>
+        <div class="att-pdf">
+          <div class="pdf-row">
+            <div class="pdf-icon">PDF</div>
+            <div class="pdf-info">
+              <span class="pdf-name">Eway_Bill_MH13.pdf</span>
+              <span class="pdf-size">2 pages · 184 KB</span>
+            </div>
+          </div>
+          <div class="att-img-meta">11:27 AM <span class="ticks">✓✓</span></div>
+        </div>
+        <div class="msg bot">
+          <span class="template-tag">BFC · DISPATCH</span>
+          <div class="msg-title">🚛 Truck MH-13-DX-5678 is now In-Transit</div>
+          <span class="msg-bullet">• Factory Weight: <b>16.5 MT</b></span>
+          <span class="msg-bullet">• Remaining Deal Balance: <b>103.5 MT</b></span>
+          <br><br>
+          We'll message you when the buyer acknowledges delivery.
+          <div class="meta">11:28 AM</div>
+        </div>
+        <div class="qr-group">
+          <div class="qr-btn">☰ Main Menu</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="cell-label">Screen 7 — E-Way Bill &amp; In-Transit</div>
+    <div class="cell-sublabel">PDF attached, system confirms in-transit with balance tracking.</div>
+  </div>
+
+  <!-- ============================== SCREEN 8 ============================== -->
+  <div class="cell">
+    <div class="phone"><div class="screen">
+      <div class="statusbar">
+        <span>6:32</span>
+        <div class="statusbar-right"><div class="signal"></div><div class="battery"><div class="battery-fill"></div></div></div>
+      </div>
+      <div class="header">
+        <span class="back-arrow">←</span>
+        <div class="avatar">BF</div>
+        <div class="header-info">
+          <div class="header-name">BiofuelCircle Partner <span class="verified-tick">✓</span></div>
+          <div class="header-status">Business Account</div>
+        </div>
+        <div class="header-icons"><span class="icon-btn">📹</span><span class="icon-btn">📞</span><span class="icon-btn">⋮</span></div>
+      </div>
+      <div class="chat">
+        <div class="msg bot">
+          <span class="template-tag">BFC · DELIVERY</span>
+          <div class="msg-title">🟢 Delivery Unloaded</div>
+          Truck MH-13-DX-5678 cleared at the buyer's plant.<br>
+          <span class="msg-bullet">• Your Weight: <b>16.5 MT</b></span>
+          <span class="msg-bullet">• Buyer Weight: <b>16.2 MT</b></span>
+          <span class="msg-bullet">• Quality Adj: <b>−₹150/MT</b> (12% moisture)</span>
+          <span class="msg-bullet">• Final Payable: <b>₹64,800</b></span>
+          <br><br>Upload your invoice or generate a platform auto-invoice?
+          <div class="meta">6:18 PM</div>
+        </div>
+        <div class="qr-group">
+          <div class="qr-btn">Upload my invoice</div>
+          <div class="qr-btn">Generate auto-invoice</div>
+        </div>
+        <div class="msg user">Generate auto-invoice
+          <div class="meta">6:20 PM <span class="ticks">✓✓</span></div>
+        </div>
+        <div class="att-pdf bot">
+          <div class="pdf-row">
+            <div class="pdf-icon">PDF</div>
+            <div class="pdf-info">
+              <span class="pdf-name">INV_MH13DX5678.pdf</span>
+              <span class="pdf-size">Tax Invoice · 92 KB</span>
+            </div>
+          </div>
+          <div class="att-img-meta" style="justify-content: flex-start; color:#667781;">6:21 PM</div>
+        </div>
+        <div class="msg bot">
+          <span class="template-tag">BFC · PAYOUT</span>
+          <div class="msg-title">💰 Early Payout Available</div>
+          Standard: <b>₹64,800</b> by Aug 28 (90 days)<br>
+          Early payout: <b>₹62,500</b> in 24h (3.5% disc.)
+          <div class="meta">6:32 PM</div>
+        </div>
+        <div class="qr-group">
+          <div class="qr-btn">💰 Request early payout</div>
+          <div class="qr-btn">Wait for standard</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="cell-label">Screen 8 — Delivery Cleared + Invoice + Payout</div>
+    <div class="cell-sublabel">Buyer unload triggers settlement, auto-invoice, and early payout offer.</div>
+  </div>
+
+  <!-- ============================== SCREEN 9 ============================== -->
+  <div class="cell">
+    <div class="phone"><div class="screen">
+      <div class="statusbar">
+        <span>2:14</span>
+        <div class="statusbar-right"><div class="signal"></div><div class="battery"><div class="battery-fill"></div></div></div>
+      </div>
+      <div class="header">
+        <span class="back-arrow">←</span>
+        <div class="avatar">BF</div>
+        <div class="header-info">
+          <div class="header-name">BiofuelCircle Partner <span class="verified-tick">✓</span></div>
+          <div class="header-status">Business Account</div>
+        </div>
+        <div class="header-icons"><span class="icon-btn">📹</span><span class="icon-btn">📞</span><span class="icon-btn">⋮</span></div>
+      </div>
+      <div class="chat" style="filter: brightness(0.85);">
+        <div class="msg bot">
+          <span class="template-tag">BFC · DISPATCH</span>
+          <div class="msg-title">🚛 Truck MH-13-DX-5678 In-Transit</div>
+          Remaining Deal Balance: <b>103.5 MT</b>
+          <div class="meta">11:28 AM</div>
+        </div>
+        <div class="qr-group"><div class="qr-btn">☰ Main Menu</div></div>
+      </div>
+      <div class="sheet-overlay"></div>
+      <div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title">
+          Main Menu
+          <span class="sheet-close">✕</span>
+        </div>
+
+        <div class="sheet-section-label">Active Deal</div>
+        <div class="sheet-row">
+          <div class="sheet-row-icon">🚛</div>
+          <div class="sheet-row-text">Deal #8842 — Soybean Briquettes
+            <div class="sheet-row-meta">In Transit · 16.5 / 120 MT</div>
+          </div>
+          <div class="sheet-row-chev">›</div>
+        </div>
+
+        <div class="sheet-section-label">Quick Actions</div>
+        <div class="sheet-row">
+          <div class="sheet-row-icon">🧾</div>
+          <div class="sheet-row-text">Upload Invoice / Weighbridge Slip</div>
+          <div class="sheet-row-chev">›</div>
+        </div>
+        <div class="sheet-row">
+          <div class="sheet-row-icon">💰</div>
+          <div class="sheet-row-text">Check Payment Status</div>
+          <div class="sheet-row-chev">›</div>
+        </div>
+        <div class="sheet-row">
+          <div class="sheet-row-icon">📊</div>
+          <div class="sheet-row-text">Update Monthly Capacity</div>
+          <div class="sheet-row-chev">›</div>
+        </div>
+
+        <div class="sheet-section-label">History</div>
+        <div class="sheet-row">
+          <div class="sheet-row-icon">📂</div>
+          <div class="sheet-row-text">View Past Deals
+            <div class="sheet-row-meta">12 closed deals</div>
+          </div>
+          <div class="sheet-row-chev">›</div>
+        </div>
+
+        <div class="sheet-section-label">Account</div>
+        <div class="sheet-row">
+          <div class="sheet-row-icon">👤</div>
+          <div class="sheet-row-text">My Profile</div>
+          <div class="sheet-row-chev">›</div>
+        </div>
+        <div class="sheet-row">
+          <div class="sheet-row-icon">💬</div>
+          <div class="sheet-row-text">Talk to Account Manager</div>
+          <div class="sheet-row-chev">›</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="cell-label">Screen 9 — Main Menu (List Message)</div>
+    <div class="cell-sublabel">Bottom sheet navigation. Active deal pinned at top, history available below.</div>
+  </div>
+
+  <!-- ============================== SCREEN 10 ============================== -->
+  <div class="cell">
+    <div class="phone"><div class="screen">
+      <div class="statusbar">
+        <span>2:15</span>
+        <div class="statusbar-right"><div class="signal"></div><div class="battery"><div class="battery-fill"></div></div></div>
+      </div>
+      <div class="header">
+        <span class="back-arrow">←</span>
+        <div class="avatar">BF</div>
+        <div class="header-info">
+          <div class="header-name">BiofuelCircle Partner <span class="verified-tick">✓</span></div>
+          <div class="header-status">Business Account</div>
+        </div>
+        <div class="header-icons"><span class="icon-btn">📹</span><span class="icon-btn">📞</span><span class="icon-btn">⋮</span></div>
+      </div>
+      <div class="chat" style="filter: brightness(0.85);">
+        <div class="msg bot" style="opacity:0.7;">
+          Tap a past deal to see its summary.
+          <div class="meta">2:15 PM</div>
+        </div>
+      </div>
+      <div class="sheet-overlay"></div>
+      <div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title">
+          Past Deals
+          <span class="sheet-close">✕</span>
+        </div>
+        <div class="sheet-row">
+          <div class="sheet-row-icon">🟢</div>
+          <div class="sheet-row-text">Deal #8821 — 100 MT
+            <div class="sheet-row-meta">Closed · Paid ₹4,02,500 · Apr 2026</div>
+          </div>
+          <div class="sheet-row-chev">›</div>
+        </div>
+        <div class="sheet-row">
+          <div class="sheet-row-icon">🟢</div>
+          <div class="sheet-row-text">Deal #8794 — 80 MT
+            <div class="sheet-row-meta">Closed · Paid ₹3,20,000 · Mar 2026</div>
+          </div>
+          <div class="sheet-row-chev">›</div>
+        </div>
+        <div class="sheet-row">
+          <div class="sheet-row-icon">🟢</div>
+          <div class="sheet-row-text">Deal #8761 — 120 MT
+            <div class="sheet-row-meta">Closed · Paid ₹4,80,000 · Feb 2026</div>
+          </div>
+          <div class="sheet-row-chev">›</div>
+        </div>
+        <div class="sheet-row">
+          <div class="sheet-row-icon">🟡</div>
+          <div class="sheet-row-text">Deal #8729 — 60 MT
+            <div class="sheet-row-meta">Closed · Quality Dispute · ₹2,28,000 · Jan 2026</div>
+          </div>
+          <div class="sheet-row-chev">›</div>
+        </div>
+        <div class="sheet-row">
+          <div class="sheet-row-icon">🟢</div>
+          <div class="sheet-row-text">Deal #8702 — 100 MT
+            <div class="sheet-row-meta">Closed · Paid ₹4,00,000 · Dec 2025</div>
+          </div>
+          <div class="sheet-row-chev">›</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="cell-label">Screen 10 — Past Deals</div>
+    <div class="cell-sublabel">Drilldown from Main Menu. Compact summary list with status icons.</div>
+  </div>
+
+</div>
+
+<div class="footer-note">
+  <h3>Notes for review</h3>
+  <ul>
+    <li><b>Sequential single-deal model</b> — Main Menu pins one active deal. New broadcasts only push after deal closes. No multi-deal navigation in v1.</li>
+    <li><b>Onboarding via Flows</b> — Screen 2 shows the bottom-sheet form. Five fields across two Flow screens. Heavy onboarding (GSTIN, bank, KYC) deferred until just-in-time at first invoice/payment.</li>
+    <li><b>Counter-price is in v1</b> — Screen 5 shows the full async flow (submit → Trader response template push later).</li>
+    <li><b>Template-bound messages tagged</b> — small "BFC · …" labels on bot messages indicate WABA template pushes that require Meta approval (see waba-template-catalog.md).</li>
+    <li><b>English only for v1</b> — Marathi/Hindi deferred to v1.1.</li>
+    <li><b>Trader-side and PWA companion</b> — out of scope. WhatsApp surface stands alone for MVP.</li>
+  </ul>
+</div>
+
+
+</section>
+
+<!-- ====================== SECTION 3: WABA TEMPLATE CATALOG ====================== -->
+<section id="catalog" class="section-block alt">
+  <div class="section-header alt">
+    <span class="section-number">03</span>
+    <span class="section-title">WABA Template Catalog</span>
+    <div class="section-sub">Every Meta-approved template message needed for the v1 MVP plus v1.1 follow-ups. Submission priorities and approval-risk notes included.</div>
+  </div>
+  <div class="doc-prose">
+<h1>WABA Template Catalog — BiofuelCircle "Next" Seller Channel</h1>
+<p><strong>Purpose:</strong> Every business-initiated outbound message from BFC to a manufacturer outside the 24-hour session window requires a Meta-pre-approved template. Below is the complete catalog needed for the v1 MVP, plus a few v1.1 templates worth submitting in parallel.</p>
+<p><strong>Approval lead time:</strong> 24 hours (utility) to 7+ days (marketing, ambiguous categorisation). Submit utility templates first.</p>
+<p><strong>Naming convention:</strong> <code>bfc_&lt;lifecycle&gt;_&lt;event&gt;_&lt;lang&gt;</code> — e.g., <code>bfc_deal_broadcast_new_en</code>.</p>
+<hr />
+<h2>Category Strategy</h2>
+<p>Meta classifies templates into three buckets, priced differently in India and approved at different bars:</p>
+<ul>
+<li><strong>Utility</strong> — confirmations, updates on a transaction the user initiated or is part of. Cheapest, fastest approval. Most of our catalog should land here.</li>
+<li><strong>Marketing</strong> — promotional, lead-gen, upsell. More expensive, slower approval, opt-out required.</li>
+<li><strong>Authentication</strong> — OTPs only.</li>
+</ul>
+<p><strong>Critical classification call:</strong> The "New Buying Requirement" broadcast is the borderline one. Meta could read this as marketing (an unsolicited business opportunity push) even though we'd argue it's utility (continuing an established commercial relationship the seller opted into during onboarding). Submit it as <strong>utility</strong> with a clear footer: <em>"You receive this because you registered as a BiofuelCircle manufacturer-supplier. Reply STOP to pause."</em> If rejected, resubmit as marketing.</p>
+<hr />
+<h2>Templates Required for v1 MVP</h2>
+<h3>1. <code>bfc_onboarding_welcome_en</code></h3>
+<p><strong>Category:</strong> Utility
+<strong>Trigger:</strong> User sends first inbound message to BFC number (cold start).
+<strong>Note:</strong> Strictly speaking, this is a session-initiated reply (within the 24-hour window opened by the user's "Hi"), so it does NOT need a template. Including here for completeness — can be sent as free-form during MVP. List for v1.1 if we want to push a re-welcome to dormant users.</p>
+<hr />
+<h3>2. <code>bfc_deal_broadcast_new_en</code> ⚠️ HIGH PRIORITY</h3>
+<p><strong>Category:</strong> Utility (submit) / Marketing (fallback)
+<strong>Trigger:</strong> Trader fires a new buying requirement matched to manufacturer's profile.
+<strong>Variables:</strong>
+- <code>{{1}}</code> — Commodity name (e.g., "Soybean Briquettes")
+- <code>{{2}}</code> — Min quality spec (e.g., "3200 kcal/kg")
+- <code>{{3}}</code> — Base price (e.g., "₹4,000")
+- <code>{{4}}</code> — Delivery window (e.g., "June 15 – June 30")
+- <code>{{5}}</code> — Full terms link (e.g., "bfc.link/req-991")</p>
+<p><strong>Body:</strong></p>
+<blockquote>
+<p>🟢 <em>New Buying Requirement</em>
+We're looking to buy {{1}} (Min {{2}}).
+• Base Price: {{3}} / MT (Ex-works)
+• Delivery: {{4}}
+• Full terms: {{5}}</p>
+<p>Are you interested in supplying this month?</p>
+</blockquote>
+<p><strong>Buttons:</strong> <code>Yes, interested</code> · <code>No, skip</code></p>
+<p><strong>Footer:</strong> "You receive this because you registered as a BiofuelCircle manufacturer-supplier. Reply STOP to pause."</p>
+<p><strong>Approval risk:</strong> Medium. Marketing-leaning copy structure. Consider an A/B-submitted variant framed more transactionally.</p>
+<hr />
+<h3>3. <code>bfc_offer_counter_accepted_en</code></h3>
+<p><strong>Category:</strong> Utility
+<strong>Trigger:</strong> Trader accepts seller's counter offer.
+<strong>Variables:</strong>
+- <code>{{1}}</code> — Quantity (e.g., "120 MT")
+- <code>{{2}}</code> — Final agreed price (e.g., "₹4,150")
+- <code>{{3}}</code> — Deal ID (e.g., "#8842")</p>
+<p><strong>Body:</strong></p>
+<blockquote>
+<p>✅ <em>Counter Accepted</em>
+The Trader has accepted your offer.
+• Quantity: {{1}}
+• Final price: {{2}} / MT
+• Deal ID: {{3}}</p>
+<p>Ready to start dispatching?</p>
+</blockquote>
+<p><strong>Buttons:</strong> <code>Start dispatch</code> · <code>Main Menu</code></p>
+<p><strong>Approval risk:</strong> Low.</p>
+<hr />
+<h3>4. <code>bfc_offer_counter_rejected_en</code></h3>
+<p><strong>Category:</strong> Utility
+<strong>Trigger:</strong> Trader rejects seller's counter; offers base price as final.
+<strong>Variables:</strong>
+- <code>{{1}}</code> — Quantity
+- <code>{{2}}</code> — Base price
+- <code>{{3}}</code> — Counter price (rejected)
+- <code>{{4}}</code> — Deal ID</p>
+<p><strong>Body:</strong></p>
+<blockquote>
+<p>⚠️ <em>Counter Not Accepted</em>
+The Trader couldn't match your asking price of {{3}} / MT.
+Base price holds at {{2}} / MT for {{1}}.
+Deal ID: {{4}}</p>
+<p>Would you like to proceed at base price?</p>
+</blockquote>
+<p><strong>Buttons:</strong> <code>Accept base price</code> · <code>Decline deal</code></p>
+<p><strong>Approval risk:</strong> Low.</p>
+<p><strong>Note:</strong> Not in happy-path mocks, but submit for approval now so v1.1 is ready.</p>
+<hr />
+<h3>5. <code>bfc_dispatch_intransit_confirmed_en</code></h3>
+<p><strong>Category:</strong> Utility
+<strong>Trigger:</strong> E-Way Bill uploaded and validated by backend. (Sent inside session — but submit as template anyway in case session expires.)
+<strong>Variables:</strong>
+- <code>{{1}}</code> — Vehicle number (e.g., "MH-13-DX-5678")
+- <code>{{2}}</code> — Factory weight (e.g., "16.5 MT")
+- <code>{{3}}</code> — Remaining deal balance (e.g., "103.5 MT")</p>
+<p><strong>Body:</strong></p>
+<blockquote>
+<p>🚛 <em>Truck {{1}} is now In-Transit</em>
+• Factory Weight: {{2}}
+• Remaining Deal Balance: {{3}}</p>
+<p>We'll message you when the buyer acknowledges delivery.</p>
+</blockquote>
+<p><strong>Buttons:</strong> <code>Main Menu</code></p>
+<p><strong>Approval risk:</strong> Low.</p>
+<hr />
+<h3>6. <code>bfc_delivery_unloaded_settlement_en</code> ⚠️ HIGH PRIORITY</h3>
+<p><strong>Category:</strong> Utility
+<strong>Trigger:</strong> Buyer's plant submits unload + weight + quality readings.
+<strong>Variables:</strong>
+- <code>{{1}}</code> — Vehicle number
+- <code>{{2}}</code> — Factory weight
+- <code>{{3}}</code> — Buyer weight
+- <code>{{4}}</code> — Quality adjustment (e.g., "−₹150/MT (12% moisture)")
+- <code>{{5}}</code> — Final payable (e.g., "₹64,800")</p>
+<p><strong>Body:</strong></p>
+<blockquote>
+<p>🟢 <em>Delivery Unloaded</em>
+Truck {{1}} cleared at the buyer's plant.
+• Your Weight: {{2}}
+• Buyer Weight: {{3}}
+• Quality Adjustment: {{4}}
+• Final Payable: {{5}}</p>
+<p>Upload your invoice or generate a platform auto-invoice?</p>
+</blockquote>
+<p><strong>Buttons:</strong> <code>Upload my invoice</code> · <code>Generate auto-invoice</code></p>
+<p><strong>Approval risk:</strong> Low. Critical operational message.</p>
+<hr />
+<h3>7. <code>bfc_invoice_generated_en</code></h3>
+<p><strong>Category:</strong> Utility
+<strong>Trigger:</strong> Auto-invoice PDF generated and pushed to buyer.
+<strong>Variables:</strong>
+- <code>{{1}}</code> — Invoice ID</p>
+<p><strong>Body:</strong></p>
+<blockquote>
+<p>🧾 <em>Invoice {{1}} Generated</em>
+Your tax invoice is ready and has been pushed to the buyer's accounting module.</p>
+</blockquote>
+<p><strong>Header:</strong> PDF media attachment.</p>
+<p><strong>Approval risk:</strong> Low.</p>
+<hr />
+<h3>8. <code>bfc_payout_early_offer_en</code></h3>
+<p><strong>Category:</strong> Utility (transactional offer on existing trade)
+<strong>Trigger:</strong> Auto-invoice generated and early-payout eligibility computed.
+<strong>Variables:</strong>
+- <code>{{1}}</code> — Standard payable amount (e.g., "₹64,800")
+- <code>{{2}}</code> — Standard payment date (e.g., "Aug 28")
+- <code>{{3}}</code> — Early payout amount (e.g., "₹62,500")
+- <code>{{4}}</code> — Discount % (e.g., "3.5%")</p>
+<p><strong>Body:</strong></p>
+<blockquote>
+<p>💰 <em>Early Payout Available</em>
+Standard payment cycle: 90 days ({{1}} by {{2}})
+Early payout option: {{3}} within 24 hours ({{4}} discount)</p>
+</blockquote>
+<p><strong>Buttons:</strong> <code>Request early payout</code> · <code>Wait for standard</code> · <code>Main Menu</code></p>
+<p><strong>Approval risk:</strong> Medium. Could read as financial promotion — submit utility with footer clarifying this is on an existing deal.</p>
+<hr />
+<h3>9. <code>bfc_payment_confirmed_en</code></h3>
+<p><strong>Category:</strong> Utility
+<strong>Trigger:</strong> Payment (standard or early) disbursed to seller's bank account.
+<strong>Variables:</strong>
+- <code>{{1}}</code> — Amount (e.g., "₹62,500")
+- <code>{{2}}</code> — UTR / reference number
+- <code>{{3}}</code> — Deal ID</p>
+<p><strong>Body:</strong></p>
+<blockquote>
+<p>✅ <em>Payment Confirmed</em>
+{{1}} has been credited to your registered bank account.
+• UTR: {{2}}
+• Deal: {{3}}</p>
+</blockquote>
+<p><strong>Approval risk:</strong> Low.</p>
+<hr />
+<h3>10. <code>bfc_deal_closed_en</code></h3>
+<p><strong>Category:</strong> Utility
+<strong>Trigger:</strong> Deal balance reaches zero — all dispatches complete and paid.
+<strong>Variables:</strong>
+- <code>{{1}}</code> — Deal ID
+- <code>{{2}}</code> — Total quantity delivered
+- <code>{{3}}</code> — Total final settlement value
+- <code>{{4}}</code> — Number of dispatches</p>
+<p><strong>Body:</strong></p>
+<blockquote>
+<p>🏁 <em>Deal {{1}} Closed</em>
+• Delivered: {{2}}
+• Total settlement: {{3}}
+• Dispatches: {{4}}</p>
+<p>Thank you for supplying through BiofuelCircle. You're now eligible for the next broadcast.</p>
+</blockquote>
+<p><strong>Approval risk:</strong> Low.</p>
+<hr />
+<h2>v1.1 — Submit in Parallel</h2>
+<h3>11. <code>bfc_gstin_request_en</code></h3>
+<p><strong>Category:</strong> Utility
+<strong>Trigger:</strong> Auto-invoice requested but GSTIN not on file.</p>
+<p><strong>Body:</strong></p>
+<blockquote>
+<p>We need your GSTIN to issue a tax-compliant invoice. Please reply with your 15-character GSTIN.</p>
+</blockquote>
+<hr />
+<h3>12. <code>bfc_capacity_refresh_monthly_en</code></h3>
+<p><strong>Category:</strong> Utility (defensible) / Marketing (risk)
+<strong>Trigger:</strong> Once a month, ~5 days before month-end, prompting capacity update for next month.</p>
+<p><strong>Body:</strong></p>
+<blockquote>
+<p>📊 <em>Update Next Month's Capacity</em>
+How much {{1}} can you supply in {{2}}? This helps us prioritise matches for you.</p>
+</blockquote>
+<p><strong>Buttons:</strong> <code>Update now</code> (opens Flow) · <code>Same as last month</code></p>
+<hr />
+<h3>13. <code>bfc_reengagement_dormant_en</code></h3>
+<p><strong>Category:</strong> Marketing
+<strong>Trigger:</strong> Seller inactive for 60+ days, no active deal.</p>
+<p><strong>Body:</strong></p>
+<blockquote>
+<p>👋 We've missed you. New buying requirements for {{1}} from large industrial buyers have come in. Want to start receiving offers again?</p>
+</blockquote>
+<p><strong>Approval risk:</strong> High — clear marketing. Approve with proper opt-out language.</p>
+<hr />
+<h3>14. <code>bfc_dispute_acknowledged_en</code></h3>
+<p><strong>Category:</strong> Utility
+<strong>Trigger:</strong> Seller raises a dispute (weight, quality, payment delay).</p>
+<p><strong>Body:</strong></p>
+<blockquote>
+<p>⚠️ <em>Dispute Raised — Deal {{1}}</em>
+Our team has logged your concern: "{{2}}". An account manager will reach out within 24 hours.</p>
+</blockquote>
+<hr />
+<h2>Operational Notes for Dev / Ops</h2>
+<p><strong>Session window mechanics:</strong>
+Every template that lands on the user opens a 24-hour free-form session. Plan flows so the user's next expected action happens within that window — otherwise the next message has to be another template. Examples:
+- After <code>bfc_deal_broadcast_new_en</code>, if the user replies <code>Yes, interested</code>, free-form is open for 24 hours — enough to capture quantity, price, and counter-flow.
+- After <code>bfc_delivery_unloaded_settlement_en</code>, free-form is open for 24 hours — enough to handle invoice generation. If user delays beyond that, the next prompt must use <code>bfc_payout_early_offer_en</code>.</p>
+<p><strong>Variable validation:</strong>
+Meta rejects templates where variables look like they could carry promotional content. Keep all <code>{{n}}</code> slots strictly numeric / structured data (amounts, dates, IDs, quantities, locations). Never inject free-text descriptions or marketing language.</p>
+<p><strong>Footer hygiene:</strong>
+Every marketing-leaning template needs an opt-out footer. Even utility templates benefit from a discreet "Reply HELP for support."</p>
+<p><strong>Rate limits:</strong>
+WhatsApp's tier system limits how many distinct users you can message per day. Start tier: 1,000 unique users / 24h. Tier 2 after sustained quality rating: 10,000/24h. Plan broadcast volume accordingly — for ~5,000 manufacturers on the platform, you'll need at least Tier 2.</p>
+<p><strong>Submission order priority:</strong>
+1. <code>bfc_deal_broadcast_new_en</code> (highest reject risk — submit first)
+2. <code>bfc_delivery_unloaded_settlement_en</code> (load-bearing for the flow)
+3. <code>bfc_offer_counter_accepted_en</code> and <code>_rejected_en</code>
+4. <code>bfc_payout_early_offer_en</code> (medium risk)
+5. Everything else</p>
+  </div>
+</section>
+
+</body>
+</html>
